@@ -1,6 +1,5 @@
 package nanjing.jun.viewlib.progress;
 
-import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -337,32 +336,32 @@ public class MszdProgress_1 extends View {
                 invalidate();
             }
         });
-        valueAnimator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-                //我在动画重复的回调里模拟了进度增长
-                curProgress++;
-                if (curProgress >= 100) {
-                    curProgress = 0;
-                }
-            }
-        });
+//        valueAnimator.addListener(new Animator.AnimatorListener() {
+//            @Override
+//            public void onAnimationStart(Animator animation) {
+//
+//            }
+//
+//            @Override
+//            public void onAnimationEnd(Animator animation) {
+//
+//            }
+//
+//            @Override
+//            public void onAnimationCancel(Animator animation) {
+//
+//            }
+//
+//            @Override
+//            public void onAnimationRepeat(Animator animation) {
+//
+////                //我在动画重复的回调里模拟了进度增长
+////                curProgress++;
+////                if (curProgress >= 100) {
+////                    curProgress = 0;
+////                }
+//            }
+//        });
         valueAnimator.start();
 
     }
