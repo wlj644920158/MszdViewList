@@ -1,0 +1,47 @@
+<resources>
+
+    <declare-styleable name="MszdButton_1">
+        <attr name="btn1normalText" format="string"></attr>
+        <attr name="btn1loadingText" format="string"></attr>
+        <attr name="btn1loadingFailText" format="string"></attr>
+        <attr name="btn1loadingSuccessText" format="string"></attr>
+        <attr name="btn1delayTime" format="integer"></attr>
+    </declare-styleable>
+
+
+    <declare-styleable name="MszdButton_2">
+        <attr name="btn2text" format="string"></attr>
+        <attr name="btn2textColor" format="color"></attr>
+        <attr name="btn2textSize" format="dimension"></attr>
+        <attr name="btn2buttonColor" format="color"></attr>
+    </declare-styleable>
+    <declare-styleable name="MszdButton_3">
+        <attr name="btn3text" format="string"></attr>
+        <attr name="btn3loadingText" format="string"></attr>
+        <attr name="btn3loadingFailText" format="string"></attr>
+        <attr name="btn3loadingSuccessText" format="string"></attr>
+        <attr name="btn3textColor" format="color"></attr>
+        <attr name="btn3textSize" format="dimension"></attr>
+        <attr name="btn3buttonColor" format="color"></attr>
+    </declare-styleable>
+
+
+    <declare-styleable name="MszdProgress_1">
+        <attr name="progress1color" format="color"></attr>
+        <attr name="progress1bgcolor" format="color"></attr>
+        <attr name="progress1round" format="boolean"></attr>
+    </declare-styleable>
+
+
+    <declare-styleable name="MszdLoading_1">
+        <attr name="loading1color" format="color"></attr>
+        <attr name="loading2color" format="color"></attr>
+        <attr name="loading3color" format="color"></attr>
+    </declare-styleable>
+
+
+    <declare-styleable name="MszdMenuItem_1">
+        <attr name="labelText" format="string"></attr>
+    </declare-styleable>
+
+</resources>
