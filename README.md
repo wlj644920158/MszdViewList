@@ -1,0 +1,24 @@
+# MszdViewList
+一些自定义控件集合
+
+ 
+# MszdButton_1
+ xml引用
+  <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:mszd="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+    <nanjing.jun.viewlib.button.MszdButton_1
+        android:id="@+id/button_1"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        mszd:btn1delayTime="2000"
+        mszd:btn1loadingFailText="登陆失败"
+        mszd:btn1loadingSuccessText="登陆成功"
+        mszd:btn1loadingText="正在登陆"
+        mszd:btn1normalText="登陆" />
+</LinearLayout>
