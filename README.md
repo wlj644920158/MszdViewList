@@ -2,7 +2,11 @@
 一些自定义控件集合
 
 # MszdButton_1
-  <?xml version="1.0" encoding="utf-8"?>
+![MszdButton_1](https://github.com/wlj644920158/MszdViewList/blob/master/screenshots/ezgif-1-beeb011ae3.gif)
+
+xml文件声明
+```
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:mszd="http://schemas.android.com/apk/res-auto"
@@ -20,3 +24,4 @@
         mszd:btn1loadingText="正在登陆"
         mszd:btn1normalText="登陆" />
 </LinearLayout>
+```
