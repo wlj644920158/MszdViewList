@@ -39,7 +39,7 @@ public class MszdButton_3 extends View {
     private static final String DEFAULT_LOADING_FAIL_TEXT = "Sign In Fail";
     private static final String DEFAULT_LOADING_SUCCESS_TEXT = "Sign In Success";
     private static final int DEFAULT_TEXT_COLOR = 0xffffffff;
-    private static final int DEFAULT_BUTTON_COLOR =0xFFe90000;
+    private static final int DEFAULT_BUTTON_COLOR = 0xFFe90000;
     private static final int DEFAULT_TEXT_SIZE = 40;
 
 
@@ -60,6 +60,7 @@ public class MszdButton_3 extends View {
     private Paint textPaint;
     private Paint buttonPaint;
     private int status = STATUS_AIDL;
+    private int width, height;
 
     private int singleTextWidth;
 
@@ -118,6 +119,7 @@ public class MszdButton_3 extends View {
         ta.recycle();
         init();
     }
+
     public void setButtonTexts(String normalText_, String loadingText_, String loadingFailText_, String loadingSuccessText_) {
         if (TextUtils.isEmpty(normalText_) || TextUtils.isEmpty(loadingText_) || TextUtils.isEmpty(loadingFailText_) || TextUtils.isEmpty(loadingSuccessText_)) {
             throw new RuntimeException("text must contains 4 status");
@@ -127,6 +129,7 @@ public class MszdButton_3 extends View {
         this.loadingFailText = loadingFailText_;
         this.loadingSuccessText = loadingSuccessText_;
     }
+
     public void setTextColor(int color) {
         this.textColor = color;
     }
@@ -185,6 +188,9 @@ public class MszdButton_3 extends View {
         super.onSizeChanged(w, h, oldw, oldh);
         centerX = w / 2;
         centerY = h / 2;
+
+        width = w;
+        height = h;
     }
 
     @Override
@@ -215,11 +221,11 @@ public class MszdButton_3 extends View {
 
     private void drawLoadingText(Canvas canvas) {
         for (int i = 0; i < loadingText.length(); i++) {
-            int y = getHeight() / 2 + textRect.height() / 2;
+            int y = height / 2 + textRect.height() / 2;
             if (i == curJumpIndex) {
                 y = y - jumpHeight;
             }
-            canvas.drawText(String.valueOf(loadingText.charAt(i)), centerX - singleTextWidth * loadingText.length() / 2 + singleTextWidth * i+singleTextWidth/2, y, textPaint);
+            canvas.drawText(String.valueOf(loadingText.charAt(i)), centerX - singleTextWidth * loadingText.length() / 2 + singleTextWidth * i + singleTextWidth / 2, y, textPaint);
         }
 
     }
@@ -259,7 +265,6 @@ public class MszdButton_3 extends View {
         }
         return true;
     }
-
 
 
     public void setOnLoadingFail() {

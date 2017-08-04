@@ -74,6 +74,9 @@ public class MszdButton_2 extends View {
 
     private int buttonRadius;//按钮的圆角
     private int buttonWidth;//控制变量,用来控制当前按钮的宽度,用于配合动画实现按钮往中间缩放或者往两边展开
+    private int width;
+    private int height;
+    private int centerX, centerY;//中心点XY坐标
 
 
     //利用handler实现的延时消息分发,主要是为了加载成功或者失败的时候提示的信息能展示一定的时间
@@ -189,11 +192,9 @@ public class MszdButton_2 extends View {
         } else {
             height = DEFAULT_HEIGHT;
         }
-
         setMeasuredDimension(width, height);
     }
 
-    private int centerX, centerY;//中心点XY坐标
 
     /**
      * 获取按钮宽度,按钮的圆角值
@@ -210,6 +211,8 @@ public class MszdButton_2 extends View {
         buttonRadius = 0;
         centerX = w / 2;
         centerY = h / 2;
+        width=w;
+        height=h;
     }
 
     /**
@@ -251,7 +254,7 @@ public class MszdButton_2 extends View {
      * @param canvas
      */
     private void drawButton(Canvas canvas) {
-        canvas.drawRoundRect(centerX - buttonWidth / 2, 0, centerX + buttonWidth / 2, getHeight(), buttonRadius, buttonRadius, buttonPaint);
+        canvas.drawRoundRect(centerX - buttonWidth / 2, 0, centerX + buttonWidth / 2, height, buttonRadius, buttonRadius, buttonPaint);
     }
 
     /**
@@ -271,8 +274,8 @@ public class MszdButton_2 extends View {
     private int progressPadding = 10;//这个是为了让圆弧靠里边一点,看效果就知道了
 
     private void drawProgress(Canvas canvas) {
-        canvas.drawArc(centerX - getHeight() / 2 + progressPadding, progressPadding, centerX + getHeight() / 2 - progressPadding, getHeight() - progressPadding, startAngle, 60, false, progressPaint);
-        canvas.drawArc(centerX - getHeight() / 2 + progressPadding, progressPadding, centerX + getHeight() / 2 - progressPadding, getHeight() - progressPadding, startAngle + 180, 60, false, progressPaint);
+        canvas.drawArc(centerX - height / 2 + progressPadding, progressPadding, centerX + height / 2 - progressPadding, height - progressPadding, startAngle, 60, false, progressPaint);
+        canvas.drawArc(centerX - height / 2 + progressPadding, progressPadding, centerX + height / 2 - progressPadding, height - progressPadding, startAngle + 180, 60, false, progressPaint);
         startAngle = startAngle + 4;
     }
 
@@ -282,8 +285,8 @@ public class MszdButton_2 extends View {
      * @param canvas
      */
     private void drawFail(Canvas canvas) {
-        canvas.drawLine(centerX - getHeight() / 4, getHeight() / 4, centerX + getHeight() / 4, getHeight() * 3 / 4, progressPaint);
-        canvas.drawLine(centerX + getHeight() / 4, getHeight() / 4, centerX - getHeight() / 4, getHeight() * 3 / 4, progressPaint);
+        canvas.drawLine(centerX - height / 4, height / 4, centerX + height / 4, height * 3 / 4, progressPaint);
+        canvas.drawLine(centerX + height / 4, height / 4, centerX - height / 4, height * 3 / 4, progressPaint);
     }
 
     /**
@@ -293,8 +296,8 @@ public class MszdButton_2 extends View {
      * @param canvas
      */
     private void drawSuccess(Canvas canvas) {
-        canvas.drawLine(centerX - getHeight() / 4, getHeight() / 2, centerX - getHeight() / 8, getHeight() * 3 / 4, progressPaint);
-        canvas.drawLine(centerX - getHeight() / 8, getHeight() * 3 / 4, centerX + getHeight() / 4, getHeight() / 4, progressPaint);
+        canvas.drawLine(centerX - height / 4, height / 2, centerX - height / 8, height * 3 / 4, progressPaint);
+        canvas.drawLine(centerX - height / 8, height * 3 / 4, centerX + height / 4, height / 4, progressPaint);
     }
 
     /**
@@ -302,7 +305,7 @@ public class MszdButton_2 extends View {
      */
     private void set_rect_2_circle() {
         //第一个动画是把长方形变成圆角长方形
-        ValueAnimator rect_2_round_animator = ValueAnimator.ofInt(0, getHeight() / 2);
+        ValueAnimator rect_2_round_animator = ValueAnimator.ofInt(0, height / 2);
         rect_2_round_animator.setDuration(400);
         rect_2_round_animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -312,7 +315,7 @@ public class MszdButton_2 extends View {
             }
         });
         //第二个动画是把圆角长方形变成圆形
-        ValueAnimator round_2_circle_animator = ValueAnimator.ofInt(getWidth(), getHeight());
+        ValueAnimator round_2_circle_animator = ValueAnimator.ofInt(width, height);
         round_2_circle_animator.setDuration(800);
         round_2_circle_animator.setInterpolator(new BounceInterpolator());
         round_2_circle_animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -354,7 +357,7 @@ public class MszdButton_2 extends View {
      */
     private void set_circle_2_rect() {
         //第一个动画圆形变到圆角
-        ValueAnimator circle_2_round_animator = ValueAnimator.ofInt(getHeight(), getWidth());
+        ValueAnimator circle_2_round_animator = ValueAnimator.ofInt(height, width);
         circle_2_round_animator.setDuration(800);
         circle_2_round_animator.setInterpolator(new BounceInterpolator());
         circle_2_round_animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -365,7 +368,7 @@ public class MszdButton_2 extends View {
             }
         });
         //第二个动画圆角变成长方形
-        ValueAnimator round_2_rect_animator = ValueAnimator.ofInt(getHeight() / 2, 0);
+        ValueAnimator round_2_rect_animator = ValueAnimator.ofInt(height / 2, 0);
         round_2_rect_animator.setDuration(400);
         round_2_rect_animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override

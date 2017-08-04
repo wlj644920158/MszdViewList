@@ -32,7 +32,6 @@ public class MszdProgress_1 extends View {
     //默认的背景的颜色
     private static final int DEFAULT_BACKGROUD_COLOR = 0xffdddddd;
 
-
     private int foreGroudColor = DEFAULT_FOREGROUD_COLOR;
     private int backGroungColor = DEFAULT_BACKGROUD_COLOR;
     //背景的画笔
@@ -48,6 +47,7 @@ public class MszdProgress_1 extends View {
 
     private int direction;
     private boolean isRound = true;
+    private int width, height;
 
     private Random random = new Random();
 
@@ -121,6 +121,8 @@ public class MszdProgress_1 extends View {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
+        width = w;
+        height = h;
         if (w < h) {
             direction = MszdDirection.MSZD_DIRECTION_VERTICAL;
         }
@@ -153,7 +155,7 @@ public class MszdProgress_1 extends View {
 
             Path p4 = new Path();
             p4.moveTo(w, h / 2);
-            p4.addArc(w - h, 0, getWidth(), h, 0, 90);
+            p4.addArc(w - h, 0, w, h, 0, 90);
             p4.lineTo(w, h);
             p4.close();
 
@@ -266,7 +268,14 @@ public class MszdProgress_1 extends View {
      * @param canvas
      */
     private void drawBackGround(Canvas canvas) {
-        canvas.drawRect(0, 0, getWidth(), getHeight(), bgPaint);
+        canvas.drawRect(0, 0, width, height, bgPaint);
+    }
+
+    //绘制当前的点
+    private void drawPoints(Canvas canvas) {
+        for (MszdProgress_1_Pointer pointer : pointerList) {
+            pointer.draw(canvas, foreGgroundPaint);
+        }
     }
 
     /**
@@ -277,20 +286,13 @@ public class MszdProgress_1 extends View {
     private void drawProgress(Canvas canvas) {
         if (direction == MszdDirection.MSZD_DIRECTION_HORIZONTAL) {
             int l = (int) (getWidth() * curProgress / 100.f);
-            canvas.drawRect(0, 0, l, getHeight(), foreGgroundPaint);
+            canvas.drawRect(0, 0, l, height, foreGgroundPaint);
         } else {
-            int l = (int) (getHeight() * curProgress / 100.f);
-            canvas.drawRect(0, getHeight() - l, getWidth(), getHeight(), foreGgroundPaint);
+            int l = (int) (height * curProgress / 100.f);
+            canvas.drawRect(0, height - l, width, height, foreGgroundPaint);
         }
 
 
-    }
-
-    //绘制当前的点
-    private void drawPoints(Canvas canvas) {
-        for (MszdProgress_1_Pointer pointer : pointerList) {
-            pointer.draw(canvas, foreGgroundPaint);
-        }
     }
 
     ValueAnimator valueAnimator;//把动画设置为全局变量主要是这个动画是无限循环的要在特定时间关掉,避免内存泄漏
@@ -336,32 +338,7 @@ public class MszdProgress_1 extends View {
                 invalidate();
             }
         });
-//        valueAnimator.addListener(new Animator.AnimatorListener() {
-//            @Override
-//            public void onAnimationStart(Animator animation) {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationEnd(Animator animation) {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationCancel(Animator animation) {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationRepeat(Animator animation) {
-//
-////                //我在动画重复的回调里模拟了进度增长
-////                curProgress++;
-////                if (curProgress >= 100) {
-////                    curProgress = 0;
-////                }
-//            }
-//        });
+
         valueAnimator.start();
 
     }

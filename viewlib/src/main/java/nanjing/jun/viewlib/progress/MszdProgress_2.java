@@ -30,6 +30,7 @@ public class MszdProgress_2 extends View {
     private Paint bgPaint;
     //当前的进度
     private int curProgress = 0;
+    private int width, height;
 
 
     //设置当前进度
@@ -92,6 +93,8 @@ public class MszdProgress_2 extends View {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
+        width = w;
+        height = h;
         if (w < h) {
             throw new RuntimeException("MszdProgress_2:width must longer than height");
         }
@@ -110,21 +113,21 @@ public class MszdProgress_2 extends View {
      * @param canvas
      */
     private void drawPoints(Canvas canvas) {
-        int layerid = canvas.saveLayer(0, 0, getWidth(), getHeight(), null);
-        int pointCount = getWidth() / DEFAULT_POINT_SPACING;
+        int layerid = canvas.saveLayer(0, 0, width, height, null);
+        int pointCount = width / DEFAULT_POINT_SPACING;
         for (int i = 1; i <= pointCount; i++) {
-            canvas.drawCircle(i * DEFAULT_POINT_SPACING, getHeight() / 2, pointsRadius, pointsPaint);
+            canvas.drawCircle(i * DEFAULT_POINT_SPACING, height / 2, pointsRadius, pointsPaint);
         }
         //通过在小怪物左边绘制一个和背景色一样的矩形来模拟被小怪物吃掉的黑点
-        int offsetX = (int) (curProgress * getWidth() / 100.0f);
-        if (offsetX <= getHeight() / 2) {
-            offsetX = getHeight() / 2;
+        int offsetX = (int) (curProgress * width / 100.0f);
+        if (offsetX <= height / 2) {
+            offsetX = height / 2;
         }
-        if (offsetX >= getWidth() - getHeight() / 2) {
-            offsetX = getWidth() - getHeight() / 2;
+        if (offsetX >= width - height / 2) {
+            offsetX = width - height / 2;
         }
-        offsetX = offsetX + getHeight() / 2;
-        canvas.drawRect(0, 0, offsetX, getHeight(), bgPaint);
+        offsetX = offsetX + height / 2;
+        canvas.drawRect(0, 0, offsetX, height, bgPaint);
         canvas.restoreToCount(layerid);
     }
 
@@ -135,25 +138,25 @@ public class MszdProgress_2 extends View {
      */
     private void drawKarton(Canvas canvas) {
         //计算小怪物当前的X左边的位置
-        int offsetX = (int) (curProgress * getWidth() / 100.0f);
+        int offsetX = (int) (curProgress * width / 100.0f);
         //这里处理两个临界值
-        if (offsetX <= getHeight() / 2) {
+        if (offsetX <= height / 2) {
             //左边的临界值
-            offsetX = getHeight() / 2;
+            offsetX = height / 2;
         }
-        if (offsetX >= getWidth() - getHeight() / 2) {
+        if (offsetX >= width - height / 2) {
             //右边的临界值
-            offsetX = getWidth() - getHeight() / 2;
+            offsetX = width - height / 2;
         }
         paint.setColor(0xffffc600);
         //绘制小怪物的脸
-        canvas.drawArc(offsetX - getHeight() / 2, 0, offsetX - getHeight() / 2 + getHeight(), getHeight(), openAgress, 360 - openAgress * 2, true, paint);
+        canvas.drawArc(offsetX - height / 2, 0, offsetX - height / 2 + height, height, openAgress, 360 - openAgress * 2, true, paint);
         paint.setColor(Color.WHITE);
         //绘制小怪物的眼白
-        canvas.drawCircle(offsetX, getHeight() / 4, eyeWhiteRadius, paint);
+        canvas.drawCircle(offsetX, height / 4, eyeWhiteRadius, paint);
         paint.setColor(Color.BLACK);
         //绘制小怪物的瞳孔
-        canvas.drawCircle(offsetX, getHeight() / 4, eyeBlackRadius, paint);
+        canvas.drawCircle(offsetX, height / 4, eyeBlackRadius, paint);
         //变量控制小怪物张口闭口
         if (isColose) {
             openAgress = openAgress - 4;

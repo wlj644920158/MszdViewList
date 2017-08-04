@@ -13,13 +13,11 @@ import nanjing.jun.viewlib.button.onMszdButtonClickListener;
 
 public class TestMszdButton_2_Activity extends AppCompatActivity {
     private MszdButton_2 mszdButton_2;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_button_2);
         mszdButton_2 = (MszdButton_2) findViewById(R.id.button_2);
-
         mszdButton_2.setOnMszdButtonClickListener(new onMszdButtonClickListener() {
             @Override
             public void onMszdButtonClick() {
@@ -51,6 +49,5 @@ public class TestMszdButton_2_Activity extends AppCompatActivity {
 
             }
         });
-
     }
 }

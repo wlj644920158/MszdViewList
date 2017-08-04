@@ -11,15 +11,11 @@ import nanjing.jun.viewlib.progress.MszdProgress_1;
  */
 
 public class TestMszdProgress_1_Activity extends AppCompatActivity {
-
-
     MszdProgress_1 mszdProgress_1;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_progress_1);
-
         mszdProgress_1 = (MszdProgress_1) findViewById(R.id.progress_1_1);
         new Thread(new Runnable() {
             @Override
@@ -41,6 +37,5 @@ public class TestMszdProgress_1_Activity extends AppCompatActivity {
                 }
             }
         }).start();
-
     }
 }

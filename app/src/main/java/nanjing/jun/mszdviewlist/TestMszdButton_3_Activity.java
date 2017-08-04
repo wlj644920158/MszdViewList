@@ -19,7 +19,6 @@ public class TestMszdButton_3_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_button_3);
         mszdButton_3 = (MszdButton_3) findViewById(R.id.button_3);
-
         mszdButton_3.setOnMszdButtonClickListener(new onMszdButtonClickListener() {
             @Override
             public void onMszdButtonClick() {
@@ -51,6 +50,5 @@ public class TestMszdButton_3_Activity extends AppCompatActivity {
 
             }
         });
-
     }
 }
