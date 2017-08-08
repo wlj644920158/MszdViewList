@@ -242,7 +242,7 @@ public class MszdProgress_1 extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        setLayerType(LAYER_TYPE_HARDWARE, null);
+        setLayerType(LAYER_TYPE_SOFTWARE, null);
         drawBackGround(canvas);
         drawProgress(canvas);
         drawPoints(canvas);
@@ -251,7 +251,9 @@ public class MszdProgress_1 extends View {
 
 
     /**
-     * 裁剪画布达到,四个角都是圆角的效果
+     * 裁剪画布达到,四个角都是圆角的效果,
+     * 这里裁剪画布只是简单的方法裁掉四个角就行,
+     * 另外的方法是利用两个Bitmap设置画笔PorterDuffXfermode模式进行裁剪
      *
      * @param canvas
      */
