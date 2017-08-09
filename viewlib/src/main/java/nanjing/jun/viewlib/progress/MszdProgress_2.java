@@ -113,7 +113,7 @@ public class MszdProgress_2 extends View {
         width = w;
         height = h;
         if (w < h) {
-            throw new IllegalArgumentException("MszdProgress_2:width must longer than height");
+            throw new IllegalArgumentException("MszdProgress_2:width must be longer than height");
         }
         eyeWhiteRadius = h / 10;
         eyeBlackRadius = h / 14;
