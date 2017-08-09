@@ -29,7 +29,6 @@ public class MszdProgress_2 extends View {
     private static final int DEFAULT_HEIGHT = 30;
 
 
-
     private Paint paint;
     private Paint pointsPaint;
     private Paint bgPaint;

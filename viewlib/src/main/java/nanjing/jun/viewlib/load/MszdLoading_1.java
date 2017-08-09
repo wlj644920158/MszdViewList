@@ -20,6 +20,8 @@ public class MszdLoading_1 extends View {
 
     //默认每次刷新视图移动的度数
     private static final int MOVE_STEP = 9;
+    private static final int DEFAULT_WIDTH = 100;
+    private static final int DEFAULT_HEIGHT = 100;
     MszdLoading_1_Arc[] arc;
     private Paint paint;
 
@@ -62,6 +64,11 @@ public class MszdLoading_1 extends View {
         arc[2].setColor(color);
     }
 
+
+
+
+
+
     private void init() {
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setStyle(Paint.Style.FILL);
@@ -79,7 +86,17 @@ public class MszdLoading_1 extends View {
         arc[2].setSweepDegree(30);
         curArcIndex = arc.length - 1;
     }
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int minw = getPaddingLeft() + getPaddingRight() + DEFAULT_WIDTH;
+        int w = resolveSizeAndState(minw, widthMeasureSpec, 0);
 
+        int minh = getPaddingTop() + getPaddingBottom() + DEFAULT_HEIGHT;
+        int h = resolveSizeAndState(minh, heightMeasureSpec, 0);
+
+        setMeasuredDimension(w, h);
+    }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
