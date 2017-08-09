@@ -34,6 +34,11 @@ public class MszdProgress_1 extends View {
 
     private int foreGroudColor = DEFAULT_FOREGROUD_COLOR;
     private int backGroungColor = DEFAULT_BACKGROUD_COLOR;
+
+
+    private static final int DEFAULT_WIDTH = 200;
+    private static final int DEFAULT_HEIGHT = 30;
+
     //背景的画笔
     private Paint bgPaint;
     //进度条的画笔
@@ -114,6 +119,20 @@ public class MszdProgress_1 extends View {
 
         clipPath = new Path();
     }
+
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int minw = getPaddingLeft() + getPaddingRight() + DEFAULT_WIDTH;
+        int w = resolveSizeAndState(minw, widthMeasureSpec, 0);
+
+        int minh = getPaddingTop() + getPaddingBottom() + DEFAULT_HEIGHT;
+        int h = resolveSizeAndState(minh, heightMeasureSpec, 0);
+
+        setMeasuredDimension(w, h);
+    }
+
 
     //定义一些圆点,这些圆点会从右边沿着贝塞尔曲线向左做动画移动
     List<MszdProgress_1_Pointer> pointerList = new ArrayList<>();
@@ -342,7 +361,5 @@ public class MszdProgress_1 extends View {
         });
 
         valueAnimator.start();
-
     }
-
 }

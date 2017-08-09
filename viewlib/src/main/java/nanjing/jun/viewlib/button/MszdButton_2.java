@@ -8,10 +8,10 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -51,26 +51,22 @@ public class MszdButton_2 extends View {
     private static final int DEFAULT_TEXT_SIZE = 40;//默认文字大小
 
 
-    private static final int DEFAULT_WIDTH = 200;//默认的控件宽度
-    private static final int DEFAULT_HEIGHT = 60;//默认的控件高度
-
-
     //关于文字的一些东西
     private String normalText = DEFAULT_TEXT;//按钮显示的文字
     private int textColor = DEFAULT_TEXT_COLOR;//按钮文字颜色
     private float textSize = DEFAULT_TEXT_SIZE;//按钮文字大小
-    private Rect textRect;//文字测量之后的矩阵,用于绘制的时候辅助使用
 
 
     private int buttonColor = DEFAULT_BUTTON_COLOR;//按钮颜色
 
 
     //我喜欢定义很多画笔,我也不知道为什么
-    private Paint textPaint;//绘制文字画笔
+    private TextPaint textPaint;//绘制文字画笔
     private Paint progressPaint;//绘制转动的圆圈的画笔
     private Paint buttonPaint;//绘制按钮的画笔
     private int status = STATUS_AIDL;//设置初始状态
-
+    private Paint.FontMetrics metrics;
+    private int textY;
 
     private int buttonRadius;//按钮的圆角
     private int buttonWidth;//控制变量,用来控制当前按钮的宽度,用于配合动画实现按钮往中间缩放或者往两边展开
@@ -85,7 +81,6 @@ public class MszdButton_2 extends View {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (status) {
-
                 //失败的时候要重新回到初始的状态
                 case STATUS_LOADING_FAIL:
                     if (listener != null) {
@@ -142,34 +137,29 @@ public class MszdButton_2 extends View {
      * 主要是乱七八糟的画笔的设置,一般其实一个画笔就能解决问题的,建议只是用一支画笔
      */
     private void init() {
-        textPaint = new Paint();
+        textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG | Paint.LINEAR_TEXT_FLAG);
         textPaint.setTextSize(textSize);
         textPaint.setColor(textColor);
-        textPaint.setAntiAlias(true);
         textPaint.setStyle(Paint.Style.FILL);
         textPaint.setTextAlign(Paint.Align.CENTER);
 
+        metrics = textPaint.getFontMetrics();
 
-        progressPaint = new Paint();
+        progressPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         progressPaint.setColor(textColor);
-        progressPaint.setAntiAlias(true);
         progressPaint.setStyle(Paint.Style.STROKE);
         progressPaint.setTextAlign(Paint.Align.CENTER);
         progressPaint.setStrokeWidth(8);
 
-        textRect = new Rect();
-        textPaint.getTextBounds(normalText, 0, normalText.length() - 1, textRect);
 
-
-        buttonPaint = new Paint();
-        buttonPaint.setAntiAlias(true);
+        buttonPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         buttonPaint.setStyle(Paint.Style.FILL);
         buttonPaint.setColor(buttonColor);
     }
 
 
     /**
-     * 测量控件,主要解决用户选择wrap_content 的时候,宽高的设置
+     * 不管padding 的取值是怎样的不会影响文字的居中显示,因为我们没有可以去处理这个padding
      *
      * @param widthMeasureSpec
      * @param heightMeasureSpec
@@ -177,22 +167,13 @@ public class MszdButton_2 extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int width_mode = MeasureSpec.getMode(widthMeasureSpec);
-        int width_size = MeasureSpec.getSize(widthMeasureSpec);
-        int height_mode = MeasureSpec.getMode(heightMeasureSpec);
-        int height_size = MeasureSpec.getSize(heightMeasureSpec);
-        int width, height;
-        if (width_mode == MeasureSpec.EXACTLY) {
-            width = width_size;
-        } else {
-            width = DEFAULT_WIDTH;
-        }
-        if (height_mode == MeasureSpec.EXACTLY) {
-            height = height_size;
-        } else {
-            height = DEFAULT_HEIGHT;
-        }
-        setMeasuredDimension(width, height);
+        int minw = (int) (getPaddingLeft() + getPaddingRight() + textPaint.measureText(normalText));
+        int w = resolveSizeAndState(minw, widthMeasureSpec, 0);
+
+        int minh = (int) (getPaddingTop() + getPaddingBottom() + Math.abs(metrics.bottom - metrics.top));
+        int h = resolveSizeAndState(minh, heightMeasureSpec, 0);
+
+        setMeasuredDimension(w, h);
     }
 
 
@@ -211,8 +192,9 @@ public class MszdButton_2 extends View {
         buttonRadius = 0;
         centerX = w / 2;
         centerY = h / 2;
-        width=w;
-        height=h;
+        width = w;
+        height = h;
+        textY = (int) (getHeight() / 2 - metrics.descent + (metrics.bottom - metrics.top) / 2);
     }
 
     /**
@@ -254,7 +236,9 @@ public class MszdButton_2 extends View {
      * @param canvas
      */
     private void drawButton(Canvas canvas) {
+        int id = canvas.saveLayer(0, 0, width, height, null);
         canvas.drawRoundRect(centerX - buttonWidth / 2, 0, centerX + buttonWidth / 2, height, buttonRadius, buttonRadius, buttonPaint);
+        canvas.restoreToCount(id);
     }
 
     /**
@@ -263,7 +247,7 @@ public class MszdButton_2 extends View {
      * @param canvas
      */
     private void drawText(Canvas canvas) {
-        canvas.drawText(normalText, centerX, centerY + textRect.height() / 2, textPaint);
+        canvas.drawText(normalText, centerX, textY, textPaint);
     }
 
 

@@ -25,6 +25,11 @@ public class MszdProgress_2 extends View {
 
     private int bgColor = DEFAULT_BG_COLOR;
 
+    private static final int DEFAULT_WIDTH = 200;
+    private static final int DEFAULT_HEIGHT = 30;
+
+
+
     private Paint paint;
     private Paint pointsPaint;
     private Paint bgPaint;
@@ -73,6 +78,18 @@ public class MszdProgress_2 extends View {
         bgPaint.setStyle(Paint.Style.FILL);
         bgPaint.setColor(Color.TRANSPARENT);
         bgPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int minw = getPaddingLeft() + getPaddingRight() + DEFAULT_WIDTH;
+        int w = resolveSizeAndState(minw, widthMeasureSpec, 0);
+
+        int minh = getPaddingTop() + getPaddingBottom() + DEFAULT_HEIGHT;
+        int h = resolveSizeAndState(minh, heightMeasureSpec, 0);
+
+        setMeasuredDimension(w, h);
     }
 
 

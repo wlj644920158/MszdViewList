@@ -9,7 +9,8 @@
 
     <nanjing.jun.viewlib.button.MszdButton_2
         android:id="@+id/button_2"
-        android:layout_width="200dp"
-        android:layout_height="40dp"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         mszd:btn2text="登陆" />
 </LinearLayout>

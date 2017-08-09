@@ -4,10 +4,10 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -42,11 +42,6 @@ public class MszdButton_3 extends View {
     private static final int DEFAULT_BUTTON_COLOR = 0xFFe90000;
     private static final int DEFAULT_TEXT_SIZE = 40;
 
-
-    private static final int DEFAULT_WIDTH = 200;
-    private static final int DEFAULT_HEIGHT = 60;
-
-
     //关于文字的一些东西
     private String normalText = DEFAULT_TEXT;
     private String loadingText = DEFAULT_LOADING_TEXT;
@@ -54,15 +49,18 @@ public class MszdButton_3 extends View {
     private String loadingSuccessText = DEFAULT_LOADING_SUCCESS_TEXT;
     private int textColor = DEFAULT_TEXT_COLOR;
     private float textSize = DEFAULT_TEXT_SIZE;
-    private Rect textRect;
     private int buttonColor = DEFAULT_BUTTON_COLOR;
 
-    private Paint textPaint;
+
+    private Paint.FontMetrics textMetrics;
+    private int textY;
+
+
+    private TextPaint textPaint;
     private Paint buttonPaint;
     private int status = STATUS_AIDL;
-    private int width, height;
 
-    private int singleTextWidth;
+    private float singleTextWidth;
 
 
     private Handler handler = new Handler() {
@@ -143,16 +141,15 @@ public class MszdButton_3 extends View {
     }
 
     private void init() {
-        textPaint = new Paint();
+        textPaint = new TextPaint();
         textPaint.setTextSize(textSize);
         textPaint.setColor(textColor);
         textPaint.setAntiAlias(true);
         textPaint.setStyle(Paint.Style.FILL);
         textPaint.setTextAlign(Paint.Align.CENTER);
 
-        textRect = new Rect();
-        textPaint.getTextBounds(normalText, 0, 1, textRect);
-        singleTextWidth = textRect.width();
+        textMetrics = textPaint.getFontMetrics();
+        singleTextWidth = textPaint.measureText(loadingText) / loadingText.length();
 
         buttonPaint = new Paint();
         buttonPaint.setAntiAlias(true);
@@ -160,25 +157,39 @@ public class MszdButton_3 extends View {
         buttonPaint.setColor(buttonColor);
     }
 
+    /**
+     * 不管padding 的取值是怎样的不会影响文字的居中显示,因为我们没有可以去处理这个padding
+     * @param widthMeasureSpec
+     * @param heightMeasureSpec
+     */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int width_mode = MeasureSpec.getMode(widthMeasureSpec);
-        int width_size = MeasureSpec.getSize(widthMeasureSpec);
-        int height_mode = MeasureSpec.getMode(heightMeasureSpec);
-        int height_size = MeasureSpec.getSize(heightMeasureSpec);
-        int width, height;
-        if (width_mode == MeasureSpec.EXACTLY) {
-            width = width_size;
-        } else {
-            width = DEFAULT_WIDTH;
+
+        int normalTextLength = (int) textPaint.measureText(normalText);
+        int loadingTextLength = (int) textPaint.measureText(loadingText);
+        int loadingFailTextLength = (int) textPaint.measureText(loadingFailText);
+        int loadingSucceessTextLength = (int) textPaint.measureText(loadingSuccessText);
+
+
+        int maxLength = normalTextLength;
+        if (maxLength < loadingTextLength) {
+            maxLength = loadingTextLength;
         }
-        if (height_mode == MeasureSpec.EXACTLY) {
-            height = height_size;
-        } else {
-            height = DEFAULT_HEIGHT;
+        if (maxLength < loadingFailTextLength) {
+            maxLength = loadingFailTextLength;
         }
-        setMeasuredDimension(width, height);
+        if (maxLength < loadingSucceessTextLength) {
+            maxLength = loadingSucceessTextLength;
+        }
+
+        int minw = (int) (getPaddingLeft() + getPaddingRight() + maxLength);
+        int w = resolveSizeAndState(minw, widthMeasureSpec, 0);
+
+        int minh = (int) (getPaddingTop() + getPaddingBottom() + Math.abs(textMetrics.bottom - textMetrics.top));
+        int h = resolveSizeAndState(minh, heightMeasureSpec, 0);
+
+        setMeasuredDimension(w, h);
     }
 
     private int centerX, centerY;
@@ -189,8 +200,7 @@ public class MszdButton_3 extends View {
         centerX = w / 2;
         centerY = h / 2;
 
-        width = w;
-        height = h;
+        textY = (int) (getHeight() / 2 - textMetrics.descent + (textMetrics.bottom - textMetrics.top) / 2);
     }
 
     @Override
@@ -215,13 +225,13 @@ public class MszdButton_3 extends View {
 
 
     private void drawText(Canvas canvas) {
-        canvas.drawText(normalText, centerX, centerY + textRect.height() / 2, textPaint);
+        canvas.drawText(normalText, centerX, textY, textPaint);
     }
 
 
     private void drawLoadingText(Canvas canvas) {
         for (int i = 0; i < loadingText.length(); i++) {
-            int y = height / 2 + textRect.height() / 2;
+            int y = textY;
             if (i == curJumpIndex) {
                 y = y - jumpHeight;
             }
@@ -231,11 +241,11 @@ public class MszdButton_3 extends View {
     }
 
     private void drawFail(Canvas canvas) {
-        canvas.drawText(loadingFailText, centerX, centerY + textRect.height() / 2, textPaint);
+        canvas.drawText(loadingFailText, centerX, textY, textPaint);
     }
 
     private void drawSuccess(Canvas canvas) {
-        canvas.drawText(loadingSuccessText, centerX, centerY + textRect.height() / 2, textPaint);
+        canvas.drawText(loadingSuccessText, centerX, textY, textPaint);
     }
 
 
